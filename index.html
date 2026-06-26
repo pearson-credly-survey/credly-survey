@@ -962,12 +962,12 @@
       // Get selected provider names
       const selectedProviderNames = [...document.querySelectorAll('#step-1 .provider-card.selected')]
         .map(c => c.querySelector('.provider-name').textContent.trim());
-      // Submit to Power Automate (text/plain keeps the request CORS-safe; the flow parses the JSON)
+      // Submit to Power Automate as JSON so triggerBody fields map directly in the flow
       if (FLOW_ENDPOINT) {
         fetch(FLOW_ENDPOINT, {
           method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             timestamp: new Date().toISOString(),
             persona: surveyPersona || '',
