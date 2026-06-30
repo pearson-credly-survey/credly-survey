@@ -166,12 +166,8 @@
     transition: all .15s;
     display: flex; align-items: center; justify-content: center;
   }
-  .imp-btn:hover   { border-color: var(--brand); color: var(--brand); }
-  .imp-btn.sel-1   { border-color: #d1d5db; background: #f3f4f6; color: var(--text); }
-  .imp-btn.sel-2   { border-color: #93c5fd; background: #eff6ff; color: #1d4ed8; }
-  .imp-btn.sel-3   { border-color: #60a5fa; background: #dbeafe; color: #1d4ed8; }
-  .imp-btn.sel-4   { border-color: var(--brand); background: #bfdbfe; color: var(--brand); }
-  .imp-btn.sel-5   { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .imp-btn:hover    { border-color: var(--brand); color: var(--brand); }
+  .imp-btn.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
   .scale-labels {
     display: flex; justify-content: space-between;
     font-size: .7rem; color: var(--muted);
@@ -214,8 +210,8 @@
     display: flex; align-items: center; justify-content: center;
     transition: all .15s;
   }
-  .star:hover { border-color: var(--accent); color: var(--accent); }
-  .star.filled { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .star:hover  { border-color: var(--brand); color: var(--brand); }
+  .star.filled  { border-color: var(--brand); background: var(--brand); color: #fff; }
 
   /* ”€ Pricing intelligence (Block 4) ”€ */
   .pricing-provider-row {
@@ -225,21 +221,20 @@
     margin-bottom: 12px;
   }
   .pricing-provider-name { font-weight: 700; font-size: .95rem; margin-bottom: 12px; }
-  .direction-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-  .dir-btn {
-    padding: 7px 14px;
-    border-radius: 20px;
+  .pricing-scale { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .pricing-scale-label { font-size: .78rem; color: var(--muted); white-space: nowrap; }
+  .pricing-btn {
+    width: 36px; height: 36px;
+    border-radius: 6px;
     border: 1.5px solid var(--border);
     background: var(--white);
-    font-size: .8rem; font-weight: 600; color: var(--muted);
     cursor: pointer;
+    font-size: .8rem; font-weight: 700; color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
     transition: all .15s;
   }
-  .dir-btn:hover { border-color: var(--brand); color: var(--brand); }
-  .dir-btn.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
-  .dir-btn.cheaper.selected   { border-color: #16a34a; background: #16a34a; }
-  .dir-btn.similar.selected   { border-color: #6b7280; background: #6b7280; }
-  .dir-btn.pricier.selected   { border-color: #dc2626; background: #dc2626; }
+  .pricing-btn:hover    { border-color: var(--brand); color: var(--brand); }
+  .pricing-btn.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
   .optional-note { font-size: .78rem; color: var(--muted); margin-bottom: 6px; }
   textarea {
     width: 100%; min-height: 72px;
@@ -945,9 +940,10 @@
       const pricingData = {};
       document.querySelectorAll('#pricing-container .pricing-provider-row').forEach(row => {
         const name = (row.querySelector('.pricing-provider-name span') || {}).textContent || '';
-        const dir  = (row.querySelector('.dir-btn.selected') || {}).textContent || '';
+        const selBtn = row.querySelector('.pricing-btn.selected');
+        const rating = selBtn ? selBtn.textContent.trim() : '';
         const note = (row.querySelector('textarea') || {}).value || '';
-        if (name.trim()) pricingData[name.trim()] = { direction: dir.trim(), note: note.trim() };
+        if (name.trim()) pricingData[name.trim()] = { rating, note: note.trim() };
       });
       // Get selected provider names
       const selectedProviderNames = [...document.querySelectorAll('#step-1 .provider-card.selected')]
@@ -1006,8 +1002,7 @@
     impRatings[driverIdx] = val;
     const row = document.getElementById('imp-' + driverIdx);
     row.querySelectorAll('.imp-btn').forEach((b, i) => {
-      b.className = 'imp-btn';
-      if (i + 1 <= val) b.classList.add('sel-' + (i + 1));
+      b.classList.toggle('selected', i + 1 <= val);
     });
     autosave();
   }
@@ -1152,13 +1147,11 @@
         <div class="pricing-provider-row">
           <div class="pricing-provider-name" style="display:flex;align-items:center;gap:8px;">${logoHtml}<span>${provider.name}</span></div>
           <p class="driver-desc" style="margin-bottom:12px;">How did ${provider.name}'s pricing compare to Credly's, based on what you saw?</p>
-          <div class="direction-btns">
-            <button class="dir-btn cheaper" onclick="toggleDir(this,'cheaper')">Significantly cheaper</button>
-            <button class="dir-btn cheaper" onclick="toggleDir(this,'cheaper')">Somewhat cheaper</button>
-            <button class="dir-btn similar" onclick="toggleDir(this,'similar')">About the same</button>
-            <button class="dir-btn pricier" onclick="toggleDir(this,'pricier')">Somewhat more expensive</button>
-            <button class="dir-btn pricier" onclick="toggleDir(this,'pricier')">Significantly more expensive</button>
-            <button class="dir-btn" onclick="toggleDir(this,'na')">I don't recall / N/A</button>
+          <div class="pricing-scale">
+            <span class="pricing-scale-label">Much cheaper</span>
+            ${[1,2,3,4,5].map(v => `<div class="pricing-btn" onclick="setPricingRating(this,'${provider.id}',${v})">${v}</div>`).join('')}
+            <span class="pricing-scale-label">Much pricier</span>
+            <div class="dontknow-btn" style="margin-left:8px;" onclick="setPricingRating(this,'${provider.id}',0)">N/A</div>
           </div>
           <p class="optional-note">If you received a quote or remember any approximate numbers, feel free to add them below.</p>
           <textarea placeholder="e.g. 'We were quoted around $X per year for ~500 recipients'"></textarea>
@@ -1216,9 +1209,9 @@
     } catch(e) {}
   }
 
-  function toggleDir(btn, type) {
-    btn.closest('.direction-btns').querySelectorAll('.dir-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
+  function setPricingRating(btn, providerId, val) {
+    btn.closest('.pricing-provider-row').querySelectorAll('.pricing-btn').forEach(b => b.classList.remove('selected'));
+    if (val > 0) btn.classList.add('selected');
   }
 
   document.addEventListener('DOMContentLoaded', () => {
