@@ -44,14 +44,14 @@
     top: 0;
     z-index: 100;
   }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; color: var(--brand); }
+  .logo { display: flex; align-items: center; gap: 0; font-weight: 700; font-size: 1.1rem; color: var(--brand); }
   .logo-badge {
     width: 32px; height: 32px; border-radius: 8px;
     background: var(--brand); color: #fff;
     display: flex; align-items: center; justify-content: center;
     font-size: .85rem; font-weight: 800; letter-spacing: -.5px;
   }
-  .logo-img { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
+  .logo-img { height: 32px; width: auto; object-fit: contain; }
   .provider-logo-img { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; flex-shrink: 0; }
   .header-label { font-size: .8rem; color: var(--muted); }
 
@@ -399,9 +399,7 @@
 <!-- Header -->
 <header>
   <div class="logo">
-    <img class="logo-img" src="https://www.google.com/s2/favicons?sz=256&domain=credly.com" alt="Credly" style="display:none;" onload="this.style.display='block';this.nextElementSibling.style.display='none';" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-    <div class="logo-badge">C</div>
-    Credly
+    <img class="logo-img" src="credly-logo.svg" alt="Credly" />
   </div>
   <span class="header-label">Value &amp; Pricing Assessment &middot; Confidential<span id="persona-tag" class="persona-tag hidden"></span></span>
 </header>
@@ -1216,13 +1214,10 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const p = params.get('persona');
-    const PERSONA_LABELS = { enterprise: 'Enterprise', smb: 'SMB', highered: 'Higher Ed', training: 'Training Providers', certprovider: 'Cert Providers' };
-    if (p && PERSONA_LABELS[p]) {
-      surveyPersona = p;
-      const tag = document.getElementById('persona-tag');
-      if (tag) { tag.textContent = PERSONA_LABELS[p]; tag.classList.remove('hidden'); }
+    const p = window.location.search.substring(1);
+    const VALID_PERSONAS = { e: 'enterprise', s: 'smb', h: 'highered', t: 'training', c: 'certprovider' };
+    if (p && VALID_PERSONAS[p]) {
+      surveyPersona = VALID_PERSONAS[p];
     }
     loadProgress();
     if (localStorage.getItem('credly_survey_submitted')) {
