@@ -4,25 +4,26 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Credly Value Assessment &mdash; Customer Survey</title>
+<link rel="stylesheet" href="//use.typekit.net/bcc0eop.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --brand:       #0f4c8a;
-    --brand-light: #e8f0fb;
-    --accent:      #e8651a;
+    --brand:       #005ba9;
+    --brand-dark:  #004a8f;
+    --brand-light: #e6f0fa;
     --text:        #1a1a2e;
-    --muted:       #6b7280;
+    --muted:       #5b5b5b;
     --border:      #e0e4ec;
-    --bg:          #f7f8fc;
+    --bg:          #f3f6f8;
     --white:       #ffffff;
-    --success:     #16a34a;
-    --radius:      10px;
-    --shadow:      0 2px 16px rgba(15,76,138,.09);
+    --success:     #005850;
+    --radius:      12px;
+    --shadow:      0 2px 16px rgba(0,91,169,.1);
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: "tt-commons-pro", "TT Commons Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -283,11 +284,11 @@
     transition: all .18s;
   }
   .btn-primary { background: var(--brand); color: #fff; }
-  .btn-primary:hover { background: #0d3d6e; }
+  .btn-primary:hover { background: var(--brand-dark); }
   .btn-secondary { background: var(--white); color: var(--muted); border: 1.5px solid var(--border); }
   .btn-secondary:hover { border-color: var(--brand); color: var(--brand); }
-  .btn-accent { background: var(--accent); color: #fff; }
-  .btn-accent:hover { background: #c55416; }
+  .btn-accent { background: var(--brand); color: #fff; }
+  .btn-accent:hover { background: var(--brand-dark); }
   .step-counter { font-size: .82rem; color: var(--muted); }
 
   /* ”€ Intro screen extras ”€ */
