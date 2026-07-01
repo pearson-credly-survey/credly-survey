@@ -53,7 +53,7 @@
   }
   .logo-img { height: 36px; width: auto; object-fit: contain; }
   .provider-logo-img { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; flex-shrink: 0; }
-  .provider-logo-img.credly-logo { width: 48px; height: 48px; }
+  .provider-logo-img.credly-logo { width: 36px; height: 36px; }
   .provider-card.locked { cursor: default; }
   .provider-card.locked:hover { border-color: var(--brand); background: var(--brand-light); }
   .header-label { font-size: .8rem; color: var(--muted); }
@@ -523,7 +523,7 @@
 
     <div class="provider-grid">
       <div class="provider-card selected locked" title="Credly is always included">
-        <input type="checkbox" checked disabled onclick="event.stopPropagation()" style="accent-color:#9ca3af;cursor:default;"/>
+        <input type="checkbox" checked disabled onclick="event.stopPropagation()" style="accent-color:#6b7280;cursor:default;"/>
         <img class="provider-logo-img credly-logo" src="credly-icon.png" alt="Credly" style="display:none;" onload="this.style.display='block';this.nextElementSibling.style.display='none';" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
         <div class="provider-badge" style="background:#0f4c8a;">CR</div>
         <div>
